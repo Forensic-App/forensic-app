@@ -9,35 +9,98 @@ import CategoriesScreen from './screens/CategoriesScreen';
 import CollectionsScreen from './screens/CollectionsScreen';
 import SearchScreen from './screens/SearchScreen';
 import SubscribeScreen from './screens/SubscribeScreen';
-// import { DrawerContent } from './screens/DrawerContent';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const Drawer = createDrawerNavigator();
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Open up App.js to start working on your app!</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
 
 export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        drawerType="front"
+        //drawerType="front"
         initialRouteName="Welcome"
         drawerContentOptions={{
-          activeTintColor: '#e91e63', itemStyle: { marginVertical: 10 },
+          activeTintColor: '#0563ad',
+          itemStyle: { marginVertical: 10 },
         }}>
-        <Drawer.Screen name="Welcome" component={WelcomeScreen} />
-        <Drawer.Screen name="About" component={AboutScreen} />
-        <Drawer.Screen name="Image Gallery" component={ImageGalleryScreen} />
-        <Drawer.Screen name="Categories" component={CategoriesScreen} />
-        <Drawer.Screen name="Collections" component={CollectionsScreen} />
-        <Drawer.Screen name="Search" component={SearchScreen} />
-        <Drawer.Screen name="Subscribe" component={SubscribeScreen} />
+        <Drawer.Screen name="Welcome" component={WelcomeScreen}
+          options={{
+            title: 'Welcome',
+            drawerIcon: ({ focused, size }) => (
+              <Ionicons
+                name='md-home'
+                size={size}
+                color={focused ? '#7cc' : '#000'}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen name="About" component={AboutScreen} options={{
+          title: 'About',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-people'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Search" component={SearchScreen} options={{
+          title: 'Search',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-search'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Categories" component={CategoriesScreen} options={{
+          title: 'Categories',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-document-text'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Collections" component={CollectionsScreen} options={{
+          title: 'Collections',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-chatbox-ellipses'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Image Gallery" component={ImageGalleryScreen} options={{
+          title: 'Image Gallery ',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-image'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Subscribe" component={SubscribeScreen} options={{
+          title: 'Subscribe',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-add-circle'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -51,6 +114,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-//        <Drawer.Screen name="ImageGallery" component={ImageGalleryScreen} />
-//        <Drawer.Screen name="Search" component={SearchScreen} />
