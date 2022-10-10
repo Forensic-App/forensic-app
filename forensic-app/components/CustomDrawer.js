@@ -4,12 +4,10 @@
 
 // const CustomDrawer = (props) => {
 //     return (
-//         <View style={{ flex1 }}>
+//         <View >
 //             <DrawerContentScrollView {...props}
 //                 contentContainerStyle={{ backgroundColor: '#f1ebeb' }}>
-//                 <ImageBackground source={require('./assets/fiulogo.png')} style={{ padding: 30 }}>
 
-//                 </ImageBackground>
 //                 <DrawerItemList {...props} />
 //             </DrawerContentScrollView>
 //             <View>

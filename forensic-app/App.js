@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import WelcomeScreen from './screens/WelcomeScreen';
 import AboutScreen from './screens/AboutScreen';
 import ImageGalleryScreen from './screens/ImageGalleryScreen';
@@ -10,6 +10,9 @@ import CollectionsScreen from './screens/CollectionsScreen';
 import SearchScreen from './screens/SearchScreen';
 import SubscribeScreen from './screens/SubscribeScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import CustomDrawer from './components/CustomDrawer'
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
+
 
 const Drawer = createDrawerNavigator();
 
@@ -17,8 +20,24 @@ export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
+        // drawerContent={props => <CustomDrawer {...props} />}
         //drawerType="front"
         initialRouteName="Welcome"
+        drawerContent={(props) => {
+          return (
+            <View style={{ flex: 1 }}>
+              <DrawerContentScrollView {...props}>
+                <ImageBackground source={require("./assets/fiulogo.png")}
+                  style={{ justifyContent: "space-between", alignItems: "center", padding: 50, marginTop: 10, marginLeft: 30, marginRight: 30, marginBottom: 10, backgroundColor: "rgb(255,255,255)" }}
+                  imageStyle=
+                  {{ opacity: 10 }}>
+                </ImageBackground>
+                <DrawerItemList {...props} />
+              </DrawerContentScrollView>
+            </View>
+          )
+        }
+        }
         drawerContentOptions={{
           activeTintColor: '#0563ad',
           itemStyle: { marginVertical: 10 },
