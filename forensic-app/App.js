@@ -10,7 +10,6 @@ import CollectionsScreen from './screens/CollectionsScreen';
 import SearchScreen from './screens/SearchScreen';
 import SubscribeScreen from './screens/SubscribeScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import CustomDrawer from './components/CustomDrawer'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 
 
