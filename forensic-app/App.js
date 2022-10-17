@@ -37,7 +37,7 @@ export default function App() {
           )
         }
         }
-        drawerContentOptions={{
+        screenOptions={{
           activeTintColor: '#0563ad',
           itemStyle: { marginVertical: 10 },
         }}>
