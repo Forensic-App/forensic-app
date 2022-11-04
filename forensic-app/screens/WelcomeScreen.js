@@ -11,7 +11,7 @@ export default function WelcomeScreen() {
     { name: names[3], url: 'https://aboutreact.com' },
     { name: names[4], url: 'https://aboutreact.com' },
     { name: names[5], url: 'https://aboutreact.com' },
-  ]); ß
+  ]);
 
   const onPress = () => Linking.openURL(url);
   return (
