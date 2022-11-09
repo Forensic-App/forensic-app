@@ -15,8 +15,6 @@ export default function SearchScreen() {
   }
 
   function handleSearchButton() {
-    const regex = RegExp("(?<=href=\")(.*?)(?=\")");
-    const test = RegExp(".+?(?=.<p><a)", 'is');
     axios
       .get("https://forensiclibrary.org/wp-json/wp/v2/posts", {
         params: { search: searchText.trim() },
@@ -28,10 +26,10 @@ export default function SearchScreen() {
           return {
             id: entry.id,
             title: entry.title.rendered,
-            content: entry.content.rendered,
-            disContent: test.exec(entry.content.rendered)[0],
-            date: new Date(entry.date),
-            link: regex.exec(entry.content.rendered)[0]
+            authors: entry.acf.authors,
+            citation: entry.acf.citation,
+            date: new Date(entry.acf.year),
+            link: entry.acf.link1
           };
         });
         setArticlesData(newArticlesData);
@@ -59,13 +57,39 @@ export default function SearchScreen() {
   );
 }
 
-function ArticleItem({ title, content, link, disContent }) {
+function ArticleItem({ title, authors, citation, link  }) {
   return (
     <View style={styles.item} >
       <Text style={{ fontSize: 14, color: 'blue' }} onPress={() => Linking.openURL(link)}>
         {title}</Text>
       <Text style={{ fontSize: 14, marginTop: 14}}>
-        {disContent.replace(/(<([^>]+)>)/ig, "")}</Text>
+        {authors}</Text>
+      <Text style={{ fontSize: 14, marginTop: 14}}>
+        {citation}</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    borderColor: "gray",
+    width: "100%",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    alignItems: "flex-start",
+  },
+  container: {
+    flex: 1,
+  },
+  item: {
+    paddingBottom: 24,
+    marginTop: 14,
+    marginHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E4E4E4",
+  },
+  title: {
+    fontSize: 32,
+  },
+});
