@@ -21,7 +21,6 @@ export default function SearchScreen() {
       })
       .then((response) => {
         const { data } = response;
-
         const newArticlesData = data.map((entry) => {
           return {
             id: entry.id,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import WelcomeScreen from './screens/WelcomeScreen';
 import AboutScreen from './screens/AboutScreen';
 import ImageGalleryScreen from './screens/ImageGalleryScreen';
@@ -9,35 +9,116 @@ import CategoriesScreen from './screens/CategoriesScreen';
 import CollectionsScreen from './screens/CollectionsScreen';
 import SearchScreen from './screens/SearchScreen';
 import SubscribeScreen from './screens/SubscribeScreen';
-// import { DrawerContent } from './screens/DrawerContent';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
+
 
 const Drawer = createDrawerNavigator();
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Open up App.js to start working on your app!</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
 
 export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        drawerType="front"
+        // drawerContent={props => <CustomDrawer {...props} />}
+        //drawerType="front"
         initialRouteName="Welcome"
-        drawerContentOptions={{
-          activeTintColor: '#e91e63', itemStyle: { marginVertical: 10 },
+        drawerContent={(props) => {
+          return (
+            <View style={{ flex: 1 }}>
+              <DrawerContentScrollView {...props}>
+                <ImageBackground source={require("./assets/fiulogo.png")}
+                  style={{ justifyContent: "space-between", alignItems: "center", padding: 50, marginTop: 10, marginLeft: 30, marginRight: 30, marginBottom: 10, backgroundColor: "rgb(255,255,255)" }}
+                  imageStyle=
+                  {{ opacity: 10 }}>
+                </ImageBackground>
+                <DrawerItemList {...props} />
+              </DrawerContentScrollView>
+            </View>
+          )
+        }
+        }
+        screenOptions={{
+          activeTintColor: '#0563ad',
+          itemStyle: { marginVertical: 10 },
         }}>
-        <Drawer.Screen name="Welcome" component={WelcomeScreen} />
-        <Drawer.Screen name="About" component={AboutScreen} />
-        <Drawer.Screen name="Image Gallery" component={ImageGalleryScreen} />
-        <Drawer.Screen name="Categories" component={CategoriesScreen} />
-        <Drawer.Screen name="Collections" component={CollectionsScreen} />
-        <Drawer.Screen name="Search" component={SearchScreen} />
-        <Drawer.Screen name="Subscribe" component={SubscribeScreen} />
+        <Drawer.Screen name="Welcome" component={WelcomeScreen}
+          options={{
+            title: 'Welcome',
+            drawerIcon: ({ focused, size }) => (
+              <Ionicons
+                name='md-home'
+                size={size}
+                color={focused ? '#7cc' : '#000'}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen name="About" component={AboutScreen} options={{
+          title: 'About',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-people'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Search" component={SearchScreen} options={{
+          title: 'Search',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-search'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Categories" component={CategoriesScreen} options={{
+          title: 'Categories',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-document-text'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Collections" component={CollectionsScreen} options={{
+          title: 'Collections',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-chatbox-ellipses'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Image Gallery" component={ImageGalleryScreen} options={{
+          title: 'Image Gallery ',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-image'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Subscribe" component={SubscribeScreen} options={{
+          title: 'Subscribe',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-add-circle'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -51,6 +132,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-//        <Drawer.Screen name="ImageGallery" component={ImageGalleryScreen} />
-//        <Drawer.Screen name="Search" component={SearchScreen} />
