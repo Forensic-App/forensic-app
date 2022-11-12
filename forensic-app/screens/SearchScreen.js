@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Searchbar } from "react-native-paper";
-import { Linking } from "react-native";
 import axios from "axios";
+import ArticleList from "../components/ArticleList";
 
 const initialArticlesData = [];
 
@@ -21,7 +21,7 @@ export default function SearchScreen() {
       })
       .then((response) => {
         const { data } = response;
-        
+
         const newArticlesData = data.map((entry) => {
           return {
             id: entry.id,
@@ -29,7 +29,7 @@ export default function SearchScreen() {
             authors: entry.acf.authors,
             citation: entry.acf.citation,
             date: new Date(entry.acf.year),
-            link: entry.acf.link1
+            link: entry.acf.link1,
           };
         });
         setArticlesData(newArticlesData);
@@ -42,54 +42,23 @@ export default function SearchScreen() {
   return (
     <View style={styles.container}>
       <Searchbar
-        style={{ marginVertical: 22, marginHorizontal: 16 }}
+        style={styles.searchbar}
         activeOutlineColor="#063970"
         value={searchText}
         onChangeText={handleSearchInput}
         onIconPress={handleSearchButton}
       />
-      <FlatList
-        data={articlesData}
-        renderItem={({ item }) => <ArticleItem {...item}/>}
-        keyExtractor={(item) => item.id}
-      />
-    </View>
-  );
-}
-
-function ArticleItem({ title, authors, citation, link  }) {
-  return (
-    <View style={styles.item} >
-      <Text style={{ fontSize: 14, color: 'blue' }} onPress={() => Linking.openURL(link)}>
-        {title}</Text>
-      <Text style={{ fontSize: 14, marginTop: 14}}>
-        {authors}</Text>
-      <Text style={{ fontSize: 14, marginTop: 14}}>
-        {citation}</Text>
+      <ArticleList articles={articlesData} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  input: {
-    borderColor: "gray",
-    width: "100%",
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 10,
-    alignItems: "flex-start",
+  searchbar: {
+    marginVertical: 22,
+    marginHorizontal: 16,
   },
   container: {
     flex: 1,
-  },
-  item: {
-    paddingBottom: 24,
-    marginTop: 14,
-    marginHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E4E4E4",
-  },
-  title: {
-    fontSize: 32,
   },
 });
