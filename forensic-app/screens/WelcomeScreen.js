@@ -1,66 +1,84 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { View, Text, Linking, TouchableOpacity, StyleSheet } from 'react-native';
 import { FlatGrid } from 'react-native-super-grid';
+import axios from "axios";
+import { color } from 'react-native-reanimated';
+
+const latestArticlesData = [];
 
 export default function WelcomeScreen() {
-  const names = ['Text retrieve from the article #1', 'Article #2 hyper-link', 'Article #3 hyper-link', 'Article #4 hyper-link', 'Article #5 hyper-link', 'Article #6 hyper-link']
-  const [items, setItems] = React.useState([
-    { name: names[0], url: 'https://aboutreact.com' },
-    { name: names[1], url: 'https://aboutreact.com' },
-    { name: names[2], url: 'https://www.google.com/search?q=research+forensic+fiu&oq=research+forensic+fiu+&aqs=chrome..69i57j33i160l2.3967j0j7&sourceid=chrome&ie=UTF-8' },
-    { name: names[3], url: 'https://aboutreact.com' },
-    { name: names[4], url: 'https://aboutreact.com' },
-    { name: names[5], url: 'https://aboutreact.com' },
-  ]);
+  const [articlesData, setArticlesData] = useState(latestArticlesData);
 
-  const onPress = () => Linking.openURL(url);
+  axios
+    .get("https://forensiclibrary.org/wp-json/wp/v2/posts",
+    )
+    .then((response) => {
+      const { data } = response;
+
+      const newArticlesData = data.map((entry) => {
+        return {
+          title: entry.title.rendered,
+          authors: entry.acf.authors,
+          link: entry.acf.link1
+        };
+      });
+      setArticlesData(newArticlesData);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
   return (
-
     <View style={{ flex: 1, marginTop: 10, marginRight: 2, marginLeft: 2, marginBottom: 2, backgroundColor: "#1a2f4d", borderRadius: 14, overflow: 'hidden' }}>
       <Text style={{ marginTop: 10, fontSize: 16, fontWeight: '550', color: "white" }}> Latest Entries </Text>
       <FlatGrid
+        // showsVerticalScrollIndicator={true}
         itemDimension={130}
-        data={items}
+        data={articlesData}
         style={styles.gridView}
-        // staticDimension={300}
-        // fixed
         spacing={10}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[styles.itemContainer, { backgroundColor: '#e3dbda' }]}
-            onPress={() => {
-              Linking.openURL(item.url);
-            }}>
-            <Text style={styles.itemName}>{item.name}</Text>
-          </TouchableOpacity>
-        )}
+        renderItem={({ item }) => <ArticleItem {...item} />
+        }
       />
     </View>
   );
 }
 
-<FlatGrid
-  itemDimension={130}
-  data={[1, 2, 3, 4, 5, 6]}
-  renderItem={({ item }) => (<Text>{item}</Text>)}
-/>
+function ArticleItem({ title, authors, link }) {
+  return (
+    // <View style={styles.item} >
+    <TouchableOpacity
+      // style={[styles.itemContainer, { backgroundColor: '#e3dbda' }]}
+      onPress={() => {
+        Linking.openURL(item.link);
+      }}>
+      <Text style={[styles.itemTitle]} onPress={() => Linking.openURL(link)}>
+        {title}</Text>
+      <Text style={[styles.itemAuthor]}>Author: {authors}</Text>
+    </TouchableOpacity >
+  );
+}
 
 const styles = StyleSheet.create({
   gridView: {
     marginTop: 10,
     flex: 1,
   },
-  itemContainer: {
+  itemTitle: {
     justifyContent: 'flex-start',
     borderRadius: 10,
     padding: 10,
-    height: 100,
-    backgroundColor: "#e3dbda"
+    height: 180,
+    backgroundColor: "#e3dbda",
+    fontWeight: '500'
   },
-  itemName: {
-    fontSize: 16,
-    color: '#000',
-    fontWeight: '580',
+  itemAuthor: {
+    justifyContent: 'flex-start',
+    borderRadius: 10,
+    padding: 10,
+    height: 180,
+    backgroundColor: "#e3dbda",
+    fontWeight: '300'
   },
   itemCode: {
     fontWeight: '400',
