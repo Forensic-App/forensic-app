@@ -11,12 +11,14 @@ import SearchScreen from './screens/SearchScreen';
 import SubscribeScreen from './screens/SubscribeScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
+import ContactScreen from './screens/ContactScreen';
 
 
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   return (
+
     <NavigationContainer>
       <Drawer.Navigator
         // drawerContent={props => <CustomDrawer {...props} />}
@@ -41,9 +43,20 @@ export default function App() {
           activeTintColor: '#0563ad',
           itemStyle: { marginVertical: 10 },
         }}>
-        <Drawer.Screen name="Welcome" component={WelcomeScreen}
+        <Drawer.Screen name="Welcome " component={WelcomeScreen}
           options={{
-            title: 'Welcome',
+            // title: 'Welcome H',
+            headerTitle: " Research Forensic Library",
+            headerStyle: {
+              backgroundColor: "#0C2141",
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+              fontWeight: "bold",
+              color: "white",
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
             drawerIcon: ({ focused, size }) => (
               <Ionicons
                 name='md-home'
@@ -55,6 +68,20 @@ export default function App() {
         />
         <Drawer.Screen name="About" component={AboutScreen} options={{
           title: 'About',
+          headerTitle: () => (
+            <ImageBackground style={{ width: 125, height: 45 }}
+              source={require("./assets/forensiclogo.png")} />
+          ),
+          headerStyle: {
+            backgroundColor: "#0C2141",
+          },
+          headerTintColor: "white",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            color: "white",
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
           drawerIcon: ({ focused, size }) => (
             <Ionicons
               name='md-people'
@@ -65,7 +92,21 @@ export default function App() {
         }}
         />
         <Drawer.Screen name="Search" component={SearchScreen} options={{
-          title: 'Search',
+          //title: 'Search',
+          headerTitle: () => (
+            <ImageBackground style={{ width: 110, height: 50 }}
+              source={require("./assets/fiuwhitelogo.png")} />
+          ),
+          headerStyle: {
+            backgroundColor: "#0C2141",
+          },
+          headerTintColor: "white",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            color: "white",
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
           drawerIcon: ({ focused, size }) => (
             <Ionicons
               name='md-search'
@@ -113,6 +154,17 @@ export default function App() {
           drawerIcon: ({ focused, size }) => (
             <Ionicons
               name='md-add-circle'
+              size={size}
+              color={focused ? '#7cc' : '#000'}
+            />
+          ),
+        }}
+        />
+        <Drawer.Screen name="Contact Us" component={ContactScreen} options={{
+          title: 'Contact Us',
+          drawerIcon: ({ focused, size }) => (
+            <Ionicons
+              name='md-call'
               size={size}
               color={focused ? '#7cc' : '#000'}
             />
