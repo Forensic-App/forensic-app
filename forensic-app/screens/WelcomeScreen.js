@@ -10,7 +10,7 @@ export default function WelcomeScreen() {
   const [articlesData, setArticlesData] = useState(latestArticlesData);
 
   axios
-    .get("https://forensiclibrary.org/wp-json/wp/v2/posts",
+    .get("https://forensiclibrary.org/wp-json/wp/v2/posts?per_page=5",
     )
     .then((response) => {
       const { data } = response;
@@ -33,7 +33,7 @@ export default function WelcomeScreen() {
       <Text style={{ marginTop: 10, fontSize: 16, fontWeight: '550', color: "white" }}> Latest Entries </Text>
       <FlatGrid
         // showsVerticalScrollIndicator={true}
-        itemDimension={130}
+        itemDimension={200}
         data={articlesData}
         style={styles.gridView}
         spacing={10}
