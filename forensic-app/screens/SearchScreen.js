@@ -4,23 +4,58 @@ import { Searchbar } from "react-native-paper";
 import axios from "axios";
 import ArticleList from "../components/ArticleList";
 
-const initialArticlesData = [];
-
 export default function SearchScreen() {
   const [searchText, setSearchText] = useState("");
-  const [articlesData, setArticlesData] = useState(initialArticlesData);
+  const [articlesData, setArticlesData] = useState([]);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [allLoaded, setAllLoaded] = useState(false);
+  const [pageNo, setPageNo] = useState(1);
 
   function handleSearchInput(prompt) {
     setSearchText(prompt);
+    setArticlesData([]);
   }
 
   function handleSearchButton() {
+    if (searchText != "") {
+      loadPosts({
+        articlesData: [],
+        searchText,
+        pageNo: 1,
+      });
+    }
+  }
+
+  const allowLoading = !loadingMore && !allLoaded && searchText != "";
+
+  function handleLoadMore(info) {
+    if (allowLoading)
+      loadPosts({
+        articlesData,
+        searchText,
+        pageNo,
+      });
+  }
+
+  /**
+   * Performs request that gets posts, manages all necessary state variables
+   *
+   * Note:  had to isolate state variable values into parameters
+   *        because React couldn't flush state changes before function call
+   */
+  function loadPosts({ articlesData, searchText, pageNo }) {
+    setArticlesData(articlesData);
+    setSearchText(searchText);
+    setPageNo(pageNo);
+    setLoadingMore(true);
+
     axios
       .get("https://forensiclibrary.org/wp-json/wp/v2/posts", {
-        params: { search: searchText.trim() },
+        params: { search: searchText.trim(), page: pageNo },
       })
       .then((response) => {
         const { data } = response;
+
         const newArticlesData = data.map((entry) => {
           return {
             id: entry.id,
@@ -31,10 +66,34 @@ export default function SearchScreen() {
             link: entry.acf.link1,
           };
         });
-        setArticlesData(newArticlesData);
+        setArticlesData([...articlesData, ...newArticlesData]);
+        setPageNo(pageNo + 1);
+
+        // loading complete
+        setLoadingMore(false);
+        setAllLoaded(false);
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response) {
+          const { data } = error.response;
+          if (data.code == "rest_post_invalid_page_number") {
+            setAllLoaded(true);
+          } else {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          }
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
+        console.log(error.config);
+        setLoadingMore(false);
       });
   }
 
@@ -47,7 +106,11 @@ export default function SearchScreen() {
         onChangeText={handleSearchInput}
         onIconPress={handleSearchButton}
       />
-      <ArticleList articles={articlesData} />
+      <ArticleList
+        articles={articlesData}
+        onLoadMoreArticles={handleLoadMore}
+        loadingMore={loadingMore}
+      />
     </View>
   );
 }
