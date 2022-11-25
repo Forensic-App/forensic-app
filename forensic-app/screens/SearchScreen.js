@@ -4,23 +4,39 @@ import { Searchbar } from "react-native-paper";
 import axios from "axios";
 import ArticleList from "../components/ArticleList";
 
-const initialArticlesData = [];
-
 export default function SearchScreen() {
   const [searchText, setSearchText] = useState("");
-  const [articlesData, setArticlesData] = useState(initialArticlesData);
+  const [articlesData, setArticlesData] = useState([]);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [allLoaded, setAllLoaded] = useState(false);
+  const [pageNo, setPageNo] = useState(1);
 
   function handleSearchInput(prompt) {
     setSearchText(prompt);
+    setArticlesData([]);
   }
 
   function handleSearchButton() {
+    setPageNo(1);
+    loadPosts();
+  }
+
+  function handleLoadMore(info) {
+    loadPosts();
+  }
+
+  function loadPosts() {
+    if (loadingMore || allLoaded || searchText == "") return;
+
+    setLoadingMore(true);
+
     axios
       .get("https://forensiclibrary.org/wp-json/wp/v2/posts", {
-        params: { search: searchText.trim() },
+        params: { search: searchText.trim(), page: pageNo },
       })
       .then((response) => {
         const { data } = response;
+
         const newArticlesData = data.map((entry) => {
           return {
             id: entry.id,
@@ -31,10 +47,20 @@ export default function SearchScreen() {
             link: entry.acf.link1,
           };
         });
-        setArticlesData(newArticlesData);
+        setArticlesData([...articlesData, ...newArticlesData]);
+        setPageNo(pageNo + 1);
+
+        // loading complete
+        setLoadingMore(false);
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response) {
+          const { data } = error.response;
+          if (data.code == "rest_post_invalid_page_number") {
+            setAllLoaded(true);
+          }
+        }
+        setLoadingMore(false);
       });
   }
 
@@ -47,7 +73,11 @@ export default function SearchScreen() {
         onChangeText={handleSearchInput}
         onIconPress={handleSearchButton}
       />
-      <ArticleList articles={articlesData} />
+      <ArticleList
+        articles={articlesData}
+        onLoadMoreArticles={handleLoadMore}
+        loadingMore={loadingMore}
+      />
     </View>
   );
 }
