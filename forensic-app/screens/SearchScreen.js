@@ -17,17 +17,36 @@ export default function SearchScreen() {
   }
 
   function handleSearchButton() {
-    setPageNo(1);
-    loadPosts();
+    if (searchText != "") {
+      loadPosts({
+        articlesData: [],
+        searchText,
+        pageNo: 1,
+      });
+    }
   }
+
+  const allowLoading = !loadingMore && !allLoaded && searchText != "";
 
   function handleLoadMore(info) {
-    loadPosts();
+    if (allowLoading)
+      loadPosts({
+        articlesData,
+        searchText,
+        pageNo,
+      });
   }
 
-  function loadPosts() {
-    if (loadingMore || allLoaded || searchText == "") return;
-
+  /**
+   * Performs request that gets posts, manages all necessary state variables
+   *
+   * Note:  had to isolate state variable values into parameters
+   *        because React couldn't flush state changes before function call
+   */
+  function loadPosts({ articlesData, searchText, pageNo }) {
+    setArticlesData(articlesData);
+    setSearchText(searchText);
+    setPageNo(pageNo);
     setLoadingMore(true);
 
     axios
@@ -52,14 +71,28 @@ export default function SearchScreen() {
 
         // loading complete
         setLoadingMore(false);
+        setAllLoaded(false);
       })
       .catch((error) => {
         if (error.response) {
           const { data } = error.response;
           if (data.code == "rest_post_invalid_page_number") {
             setAllLoaded(true);
+          } else {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
           }
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
         }
+        console.log(error.config);
         setLoadingMore(false);
       });
   }
