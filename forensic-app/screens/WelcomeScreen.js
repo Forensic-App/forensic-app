@@ -67,8 +67,8 @@ function ArticleItem({ title, authors, link }) {
     // <View style={styles.item} >
     <TouchableOpacity
       // style={[styles.itemContainer, { backgroundColor: '#e3dbda' }]}
-      onPress={() => {
-        Linking.openURL(item.link);
+      onPress={() => {``
+        Linking.openURL(link);
       }}>
       <Text style={[styles.itemTitle]} onPress={() => Linking.openURL(link)}>
         {title}</Text>
