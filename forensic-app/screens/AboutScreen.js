@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -11,6 +11,20 @@ export default function AboutScreen() {
     //const [title, setTitle] = useState('');
 
     return (
+        <>
+        <View style={{height: 300, width: null, overflow: "hidden"}}>
+        <ImageBackground
+        style={{flex:1, height:null, width: null, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.5)'}}
+        resizeMode = 'cover'
+        source={require('../assets/fiuhomebannerdarker.jpg')}
+        imageStyle = {{opacity:2.5}}
+        >
+          <Text style={{textAlign: 'center', fontSize: 20, justifyContent: 'center', color: 'white', fontWeight:'bold', fontSize: '25px'}}>A curated collection of publicly-accessible
+            material relating to every discipline of
+            the forensic sciences.
+          </Text> 
+        </ImageBackground>
+      </View>
         <LinearGradient colors={['#ffff', '#cfd4da', '#5F7490']}>
             <ScrollView>
                 <View style={{ marginTop: 10, marginRight: 2, marginLeft: 2, marginBottom: 70, backgroundColor: "#1a2f4d", borderRadius: 14 }}>
@@ -74,6 +88,7 @@ export default function AboutScreen() {
                 </View>
             </ScrollView>
         </LinearGradient>
+        </>
     );
 };
 
