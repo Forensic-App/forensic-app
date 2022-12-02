@@ -91,7 +91,7 @@ export default function App() {
           ),
         }}
         />
-        <Drawer.Screen name="Search" component={SearchScreen} options={{
+        <Drawer.Screen name="Search" component={SearchScreen} initialParams = {{ appendUrl: ""}} options={{
           //title: 'Search',
           headerTitle: () => (
             <ImageBackground style={{ width: 110, height: 50 }}

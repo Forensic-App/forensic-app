@@ -10,7 +10,7 @@ export default function CategoriesScreen() {
   const navigation = useNavigation();
 
     const [items, setItems] = React.useState([
-        { name: 'ALCOHOL', code: '#1abc9c', appendUrl: 'categories=195'},
+        { name: 'ALCOHOL', code: '#1abc9c', appendUrl: '195'},
         { name: 'ANTHROPOLOGY', code: '#2ecc71', },
         { name: 'BIOMETRICS', code: '#3498db', },
         { name: 'BLOODSTAIN PATTERN ANALYSIS', code: '#9b59b6',  },
@@ -42,7 +42,7 @@ export default function CategoriesScreen() {
           // fixed
           spacing={10}
           renderItem={({ item }) => (
-            <TouchableOpacity style={[styles.itemContainer, { backgroundColor: item.code }]} onPress={() => {navigation.navigate('Search',{appendUrl: item.appendUrl})}}>
+            <TouchableOpacity style={[styles.itemContainer, { backgroundColor: item.code }]} onPress={() => {navigation.navigate('Search',{data: item.appendUrl})}}>
               <Text style={styles.itemName}>{item.name}</Text>
             </TouchableOpacity>
           )}
