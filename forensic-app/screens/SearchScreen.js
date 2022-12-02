@@ -4,27 +4,45 @@ import { Searchbar } from "react-native-paper";
 import axios from "axios";
 import ArticleList from "../components/ArticleList";
 import { useFocusEffect } from '@react-navigation/native';
+import { useEffect } from '@react-navigation/native';
 import { navigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
-export default function SearchScreen({navigation}) {
+export default function SearchScreen({navigation}, props) {
   const [searchText, setSearchText] = useState("");
- // const [appendUrl] = this.props.navigation.getParams('appendUrl',"");
   const [articlesData, setArticlesData] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const [allLoaded, setAllLoaded] = useState(false);
   const [pageNo, setPageNo] = useState(1);
+  const route = useRoute();
+  var category;
+  console.log(category);
   
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      category = route.params.data;
+      //props.navigation.setParams(params);
+      loadPosts({
+        articlesData: [], 
+        searchText,
+        pageNo: 1,
+        category: category,
+      });
+    });
+    return unsubscribe;
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+  }, [navigation]);
 
-  useFocusEffect(
+  /*useFocusEffect(
     React.useCallback(() => {
       loadPosts({
         articlesData: [],
         searchText,
         pageNo: 1,
-        //appendUrl,
+        category: category,
       });
     }, [])
-  );
+  );*/
 
   function handleSearchInput(prompt) {
     setSearchText(prompt);
@@ -37,6 +55,7 @@ export default function SearchScreen({navigation}) {
         articlesData: [],
         searchText,
         pageNo: 1,
+        category,
       });
     }
   }
@@ -49,6 +68,7 @@ export default function SearchScreen({navigation}) {
         articlesData,
         searchText,
         pageNo,
+        category,
       });
   }
 
@@ -58,15 +78,15 @@ export default function SearchScreen({navigation}) {
    * Note:  had to isolate state variable values into parameters
    *        because React couldn't flush state changes before function call
    */
-  function loadPosts({ articlesData, searchText, pageNo }) {
+  function loadPosts({ articlesData, searchText, pageNo, category }) {
     setArticlesData(articlesData);
     setSearchText(searchText);
     setPageNo(pageNo);
     setLoadingMore(true);
 
     axios
-      .get("https://forensiclibrary.org/wp-json/wp/v2/posts", {
-        params: { search: searchText.trim(), page: pageNo, /*appendUrl: appendUrl */},
+      .get("https://forensiclibrary.org/wp-json/wp/v2/posts?", {
+        params: { search: searchText.trim(), page: pageNo, categories: category},
       })
       .then((response) => {
         const { data } = response;
