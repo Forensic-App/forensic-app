@@ -3,13 +3,28 @@ import { View, StyleSheet } from "react-native";
 import { Searchbar } from "react-native-paper";
 import axios from "axios";
 import ArticleList from "../components/ArticleList";
+import { useFocusEffect } from '@react-navigation/native';
+import { navigation } from '@react-navigation/native';
 
-export default function SearchScreen() {
+export default function SearchScreen({navigation}) {
   const [searchText, setSearchText] = useState("");
+ // const [appendUrl] = this.props.navigation.getParams('appendUrl',"");
   const [articlesData, setArticlesData] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const [allLoaded, setAllLoaded] = useState(false);
   const [pageNo, setPageNo] = useState(1);
+  
+
+  useFocusEffect(
+    React.useCallback(() => {
+      loadPosts({
+        articlesData: [],
+        searchText,
+        pageNo: 1,
+        //appendUrl,
+      });
+    }, [])
+  );
 
   function handleSearchInput(prompt) {
     setSearchText(prompt);
@@ -51,7 +66,7 @@ export default function SearchScreen() {
 
     axios
       .get("https://forensiclibrary.org/wp-json/wp/v2/posts", {
-        params: { search: searchText.trim(), page: pageNo },
+        params: { search: searchText.trim(), page: pageNo, /*appendUrl: appendUrl */},
       })
       .then((response) => {
         const { data } = response;
@@ -99,6 +114,7 @@ export default function SearchScreen() {
 
   return (
     <View style={styles.container}>
+      
       <Searchbar
         style={styles.searchbar}
         activeOutlineColor="#063970"
