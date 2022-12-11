@@ -23,7 +23,6 @@ export default function ResultsScreen({navigation}, props) {
     const unsubscribe = navigation.addListener('focus', () => {
       let category = route.params.data;
       console.log(category);
-      //props.navigation.setParams(params);
       loadPosts({
         articlesData: [], 
         searchText,
@@ -32,7 +31,6 @@ export default function ResultsScreen({navigation}, props) {
       });
     });
     return unsubscribe;
-    // Return the function to unsubscribe from the event so it gets removed on unmount
   }, [navigation, route.params?.data]);
 
   function handleSearchInput(prompt) {
