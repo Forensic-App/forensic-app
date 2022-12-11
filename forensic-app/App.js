@@ -9,6 +9,8 @@ import CategoriesScreen from './screens/CategoriesScreen';
 import CollectionsScreen from './screens/CollectionsScreen';
 import SearchScreen from './screens/SearchScreen';
 import SubscribeScreen from './screens/SubscribeScreen';
+import CatResultsScreen from './screens/CatResultsScreen';
+import ColResultsScreen from './screens/ColResultsScreen'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import ContactScreen from './screens/ContactScreen';
@@ -169,6 +171,18 @@ export default function App() {
               color={focused ? '#7cc' : '#000'}
             />
           ),
+        }}
+        />
+        <Drawer.Screen name="CatResults" component={CatResultsScreen} options={{
+            drawerLabel: () => null,
+            title: null,
+            drawerItemStyle: {height: 0}
+        }}
+        />
+        <Drawer.Screen name="ColResults" component={ColResultsScreen} options={{
+            drawerLabel: () => null,
+            title: null,
+            drawerItemStyle: {height: 0}
         }}
         />
       </Drawer.Navigator>

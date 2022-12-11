@@ -3,14 +3,36 @@ import { View, StyleSheet } from "react-native";
 import { Searchbar } from "react-native-paper";
 import axios from "axios";
 import ArticleList from "../components/ArticleList";
+import { useFocusEffect } from '@react-navigation/native';
+import { useEffect } from '@react-navigation/native';
+import { navigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
-export default function SearchScreen() {
+export default function ResultsScreen({navigation}, props) {
   const [searchText, setSearchText] = useState("");
   const [articlesData, setArticlesData] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const [allLoaded, setAllLoaded] = useState(false);
   const [pageNo, setPageNo] = useState(1);
-
+  const route = useRoute();
+  const [category, setCategory] = useState(route.params.data);
+  
+  
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      let category = route.params.data;
+      console.log(category);
+      //props.navigation.setParams(params);
+      loadPosts({
+        articlesData: [], 
+        searchText,
+        pageNo: 1,
+        category: category,
+      });
+    });
+    return unsubscribe;
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+  }, [navigation, route.params?.data]);
 
   function handleSearchInput(prompt) {
     setSearchText(prompt);
@@ -23,6 +45,7 @@ export default function SearchScreen() {
         articlesData: [],
         searchText,
         pageNo: 1,
+        category,
       });
     }
   }
@@ -35,6 +58,7 @@ export default function SearchScreen() {
         articlesData,
         searchText,
         pageNo,
+        category,
       });
   }
 
@@ -44,7 +68,7 @@ export default function SearchScreen() {
    * Note:  had to isolate state variable values into parameters
    *        because React couldn't flush state changes before function call
    */
-  function loadPosts({ articlesData, searchText, pageNo}) {
+  function loadPosts({ articlesData, searchText, pageNo, category }) {
     setArticlesData(articlesData);
     setSearchText(searchText);
     setPageNo(pageNo);
@@ -52,7 +76,7 @@ export default function SearchScreen() {
 
     axios
       .get("https://forensiclibrary.org/wp-json/wp/v2/posts?", {
-        params: { search: searchText.trim(), page: pageNo},
+        params: { search: searchText.trim(), page: pageNo, categories: category},
       })
       .then((response) => {
         const { data } = response;
